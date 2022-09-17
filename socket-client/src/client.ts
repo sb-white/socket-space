@@ -1,10 +1,9 @@
 //Imports
-
-const io = require("socket.io-client");
+import io from "socket.io-client";
 
 //Client Start
 
-const ioClient = io.connect("http://localhost:8000");
+const ioClient = io("http://localhost:8000").connect();
 
 /**
  * Test Call to test connection between server and (mutliple clients)

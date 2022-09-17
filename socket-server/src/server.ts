@@ -1,13 +1,12 @@
 // Imports
-
-const {Server} = require("socket.io");
+import {Server, Socket} from "socket.io";
 
 // Variables
 //  User Management
-clients = new Map();
+let clients = new Map<string, Socket>();
 
 // Server start
-server = new Server(8000);
+const server = new Server(8000);
 
 /**
  * Executes whenever a client connects (contains disconnect code)
@@ -16,11 +15,11 @@ server.on("connection", (socket) => {
 
     console.log("Connected: " + socket.id);
     //Add to client map
-    clients.set(socket, socket.id);
+    clients.set(String(socket.id), socket);
 
     //Disconnects
     socket.on("disconnect", () =>  {
-        clients.delete(socket);
+        clients.delete(String(socket.id));
         console.info("Disconnected: " + socket.id);
     });
 
@@ -33,7 +32,7 @@ server.on("connection", (socket) => {
 setInterval(() => {
 
     //loop through clients
-    for (const [client, id] of clients.entries()) {
+    for (const [id, client] of clients.entries()) {
         client.emit("test", id);
     }
 
